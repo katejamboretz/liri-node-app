@@ -47,11 +47,19 @@ if (searchType === "spotify-this-song") {
   spot
     .search({ type: "track", query: searchTerm })
     .then(function(response) {
-      console.log(response);
-      //   console.log("Artist(s): " + response.tracks.artists);
-      //   console.log("Song Name: " + response.tracks.items.name);
-      //   console.log("Preview Link: " + response.tracks.items.preview_url);
-      //   console.log("Album: " + response.tracks.items.album);
+      //   console.log(response);
+      for (var i = 0; i < response.tracks.items.length; i++) {
+        console.log("SONG NAME: " + response.tracks.items[i].name);
+        console.log("PREVIEW LINK: " + response.tracks.items[i].preview_url);
+        console.log("ALBUM: " + response.tracks.items[i].album.name);
+        console.log("ARTISTS: ");
+        for (var j = 0; j < response.tracks.items[i].artists.length; j++) {
+          console.log(response.tracks.items[i].artists[j].name);
+        }
+        console.log(
+          "///////////////////////////////////////////////////////////////////"
+        );
+      }
     })
     .catch(function(err) {
       console.log(err);
