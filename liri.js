@@ -11,7 +11,6 @@
 // npm install axios
 // npm install moment
 // npm install dotenv
-// npm install fs
 
 // require apps as described in documentation
 
@@ -78,6 +77,41 @@ if (searchType === "spotify-this-song") {
     });
 }
 
+// do-what-it-says
+// use fs to run random.txt, run spotify-this-song for 'I want it that way'
+if (searchType === "do-what-it-says") {
+  var term = fs.readFile("random.txt", "utf8", function(error, data) {
+    var array = data.split(",");
+    if (array[0] === "spotify-this-song") {
+      spot
+        .search({ type: "track", query: array[1] })
+        .then(function(response) {
+          //   console.log(response);
+          for (var i = 0; i < response.tracks.items.length; i++) {
+            console.log("SONG NAME: " + response.tracks.items[i].name);
+            console.log(
+              "PREVIEW LINK: " + response.tracks.items[i].preview_url
+            );
+            console.log("ALBUM: " + response.tracks.items[i].album.name);
+            console.log("ARTISTS: ");
+            for (var j = 0; j < response.tracks.items[i].artists.length; j++) {
+              console.log(response.tracks.items[i].artists[j].name);
+            }
+            console.log(
+              "///////////////////////////////////////////////////////////////////\\\\\\"
+            );
+          }
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
+    }
+
+    if (array[0] === "concert-this") {
+    }
+  });
+}
+
 // if band, make API request through Axios for Bands in Town API
 // "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp"
 
@@ -94,14 +128,14 @@ if (searchType === "concert-this") {
     // -MM/DD/YYYY date of event
 
     for (var i = 0; i < response.data.length; i++) {
-      console.log("Concert Name: " + response.data[0].title);
+      console.log("Concert Name: " + response.data[i].title);
       console.log(
         "Venue: " +
-          response.data[0].venue.name +
+          response.data[i].venue.name +
           ", " +
           response.data[i].venue.city
       );
-      console.log("Date: " + response.data[0].datetime);
+      console.log("Date: " + response.data[i].datetime);
 
       console.log(
         "///////////////////////////////////////////////////////////////////\\\\\\"
@@ -177,10 +211,143 @@ if (searchType === "movie-this" && !searchTerm) {
     });
 }
 
-// if (searchType === "do-what-it-says") {
-// }
-
 // do-what-it-says
 // use fs to run random.txt, run spotify-this-song for 'I want it that way'
+if (searchType === "do-what-it-says") {
+  var term = fs.readFile("random.txt", "utf8", function(error, data) {
+    var array = data.split(",");
+    if (array[0] === "spotify-this-song") {
+      spot
+        .search({ type: "track", query: array[1] })
+        .then(function(response) {
+          console.log("SONG SEARCHED: " + array[1]);
+          console.log(
+            "------------------------------------------------------------------------"
+          );
+          //   console.log(response);
+          for (var i = 0; i < response.tracks.items.length; i++) {
+            console.log("SONG NAME: " + response.tracks.items[i].name);
+            console.log(
+              "PREVIEW LINK: " + response.tracks.items[i].preview_url
+            );
+            console.log("ALBUM: " + response.tracks.items[i].album.name);
+            console.log("ARTISTS: ");
+            for (var j = 0; j < response.tracks.items[i].artists.length; j++) {
+              console.log(response.tracks.items[i].artists[j].name);
+            }
+            console.log(
+              "///////////////////////////////////////////////////////////////////\\\\\\"
+            );
+          }
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
+    }
+
+    if (array[0] === "concert-this") {
+      var URL =
+        "https://rest.bandsintown.com/artists/" +
+        array[1] +
+        "/events?app_id=codingbootcamp";
+
+      axios.get(URL).then(function(response) {
+        // conole.log data for band
+        // - name of venue
+        // - venue location
+        // -MM/DD/YYYY date of event
+        console.log("BAND SEARCHED: " + array[1]);
+        console.log(
+          "------------------------------------------------------------------------"
+        );
+
+        for (var i = 0; i < response.data.length; i++) {
+          console.log("Concert Name: " + response.data[i].title);
+          console.log(
+            "Venue: " +
+              response.data[i].venue.name +
+              ", " +
+              response.data[i].venue.city
+          );
+          console.log("Date: " + response.data[i].datetime);
+
+          console.log(
+            "///////////////////////////////////////////////////////////////////\\\\\\"
+          );
+        }
+      });
+    }
+
+    if (array[0] === "movie-this" && array[1]) {
+      var URL = "https://www.omdbapi.com/?t=" + array[1] + "&apikey=dd6d0395&";
+      axios
+        .get(URL)
+        .then(function(response) {
+          console.log("MOVIE SEARCHED: " + array[1]);
+          console.log(
+            "------------------------------------------------------------------------"
+          );
+          // console.log data for movie
+          // - title
+          // - year came out
+          // - IMDB rating
+          // - rotten tomatoes rating
+          // - country movie produced
+          // - language
+          // - plot
+          // - actors
+          console.log("Title: " + response.data.Title);
+          console.log("Year: " + response.data.Year);
+          console.log("IMDB Rating: " + response.data.imdbRating);
+          console.log(
+            "Rotten Tomatoes Rating: " + response.data.Ratings[1].Value
+          );
+          console.log("Country Produced In: " + response.data.Country);
+          console.log("Language: " + response.data.Language);
+          console.log("Plot: " + response.data.Plot);
+          console.log("Actors: " + response.data.Actors);
+          console.log(
+            "///////////////////////////////////////////////////////////////////\\\\\\"
+          );
+        })
+        .catch(function(error) {
+          console.log("Error: " + error);
+        });
+    }
+
+    if (array[0] === "movie-this" && !array[1]) {
+      var URL = "https://www.omdbapi.com/?t=Mr.+Nobody&apikey=dd6d0395&";
+      axios
+        .get(URL)
+        .then(function(response) {
+          // console.log data for movie
+          // - title
+          // - year came out
+          // - IMDB rating
+          // - rotten tomatoes rating
+          // - country movie produced
+          // - language
+          // - plot
+          // - actors
+          console.log("Title: " + response.data.Title);
+          console.log("Year: " + response.data.Year);
+          console.log("IMDB Rating: " + response.data.imdbRating);
+          console.log(
+            "Rotten Tomatoes Rating: " + response.data.Ratings[1].Value
+          );
+          console.log("Country Produced In: " + response.data.Country);
+          console.log("Language: " + response.data.Language);
+          console.log("Plot: " + response.data.Plot);
+          console.log("Actors: " + response.data.Actors);
+          console.log(
+            "///////////////////////////////////////////////////////////////////\\\\\\"
+          );
+        })
+        .catch(function(error) {
+          console.log("Error: " + error);
+        });
+    }
+  });
+}
 
 // bonus - add log.txt to append commands to
