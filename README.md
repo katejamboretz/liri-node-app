@@ -16,7 +16,7 @@ See what is returned with 'node do-what-it-says', then look at what is within th
 
 ### Video Demonstration
 
-![Liri Demo](LiriDemo2.mp4)
+![Liri Demo](LiriDemo2.gif)
 
 ### Built with
 
