@@ -16,8 +16,8 @@
 // require apps as described in documentation
 
 var Spotify = require("node-spotify-api");
-// var axios = require(axios);
-// var moment = require(moment);
+var axios = require("axios");
+var moment = require("moment");
 var dotenv = require("dotenv").config();
 var fs = require("fs");
 
@@ -36,10 +36,21 @@ var searchType = process.argv[2];
 var searchTerm = process.argv[3];
 
 // if song, make API request for Spotify
-
+console.log(
+  "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+);
 console.log("Search Term: " + searchTerm);
 console.log("Search Type: " + searchType);
-console.log("Keys: " + keys.spotify);
+console.log(
+  "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+);
+// console.log("Keys: " + keys.spotify);
+
+// conole.log data for song
+// - artist(s)
+// - song's name
+// - preview link for song from Spotify
+// - album that song is from
 
 var spot = new Spotify(keys.spotify);
 
@@ -57,7 +68,7 @@ if (searchType === "spotify-this-song") {
           console.log(response.tracks.items[i].artists[j].name);
         }
         console.log(
-          "///////////////////////////////////////////////////////////////////"
+          "///////////////////////////////////////////////////////////////////\\\\\\"
         );
       }
     })
@@ -66,22 +77,37 @@ if (searchType === "spotify-this-song") {
     });
 }
 
-// conole.log data for song
-// - artist(s)
-// - song's name
-// - preview link for song from Spotify
-// - album that song is from
-
 // if band, make API request through Axios for Bands in Town API
 // "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp"
 
 if (searchType === "concert-this") {
-}
+  var URL =
+    "https://rest.bandsintown.com/artists/" +
+    searchTerm +
+    "/events?app_id=codingbootcamp";
 
-// conole.log data for band
-// - name of venue
-// - venue location
-// -MM/DD/YYYY date of event
+  axios.get(URL).then(function(response) {
+    // conole.log data for band
+    // - name of venue
+    // - venue location
+    // -MM/DD/YYYY date of event
+
+    for (var i = 0; i < response.data.length; i++) {
+      console.log("Concert Name: " + response.data[0].title);
+      console.log(
+        "Venue: " +
+          response.data[0].venue.name +
+          ", " +
+          response.data[i].venue.city
+      );
+      console.log("Date: " + response.data[0].datetime);
+
+      console.log(
+        "///////////////////////////////////////////////////////////////////\\\\\\"
+      );
+    }
+  });
+}
 
 // if movie, make API request through Axios for OMDB api
 // use key Trilogy
