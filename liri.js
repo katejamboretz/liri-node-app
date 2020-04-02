@@ -5,7 +5,6 @@
 //     - axios
 //     - moment
 //     - DotEnv
-//     - fs
 
 // npm install --save node-spotify-api
 // npm install axios
