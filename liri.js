@@ -34,6 +34,7 @@ var searchType = process.argv[2];
 // process.argv[3] is the search term
 
 var searchTerm = process.argv[3];
+var searchJoin = process.argv.slice(3).join("+");
 
 // if song, make API request for Spotify
 console.log(
@@ -112,20 +113,69 @@ if (searchType === "concert-this") {
 // if movie, make API request through Axios for OMDB api
 // use key Trilogy
 
-// if (searchType === "movie-this") {
-// }
-
-// conole.log data for movie
-// - title
-// - year came out
-// - IMDB rating
-// - rotten tomatoes rating
-// - country movie produced
-// - language
-// - plot
-// - actors
+if (searchType === "movie-this" && searchTerm) {
+  var URL = "https://www.omdbapi.com/?t=" + searchTerm + "&apikey=dd6d0395&";
+  axios
+    .get(URL)
+    .then(function(response) {
+      // console.log data for movie
+      // - title
+      // - year came out
+      // - IMDB rating
+      // - rotten tomatoes rating
+      // - country movie produced
+      // - language
+      // - plot
+      // - actors
+      console.log("Title: " + response.data.Title);
+      console.log("Year: " + response.data.Year);
+      console.log("IMDB Rating: " + response.data.imdbRating);
+      console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
+      console.log("Country Produced In: " + response.data.Country);
+      console.log("Language: " + response.data.Language);
+      console.log("Plot: " + response.data.Plot);
+      console.log("Actors: " + response.data.Actors);
+      console.log(
+        "///////////////////////////////////////////////////////////////////\\\\\\"
+      );
+    })
+    .catch(function(error) {
+      console.log("Error: " + error);
+    });
+}
 
 // no movie, output 'Mr. Nobody' data
+
+if (searchType === "movie-this" && !searchTerm) {
+  var URL = "https://www.omdbapi.com/?t=Mr.+Nobody&apikey=dd6d0395&";
+  axios
+    .get(URL)
+    .then(function(response) {
+      // console.log data for movie
+      // - title
+      // - year came out
+      // - IMDB rating
+      // - rotten tomatoes rating
+      // - country movie produced
+      // - language
+      // - plot
+      // - actors
+      console.log("Title: " + response.data.Title);
+      console.log("Year: " + response.data.Year);
+      console.log("IMDB Rating: " + response.data.imdbRating);
+      console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
+      console.log("Country Produced In: " + response.data.Country);
+      console.log("Language: " + response.data.Language);
+      console.log("Plot: " + response.data.Plot);
+      console.log("Actors: " + response.data.Actors);
+      console.log(
+        "///////////////////////////////////////////////////////////////////\\\\\\"
+      );
+    })
+    .catch(function(error) {
+      console.log("Error: " + error);
+    });
+}
 
 // if (searchType === "do-what-it-says") {
 // }
