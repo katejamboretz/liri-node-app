@@ -76,41 +76,6 @@ if (searchType === "spotify-this-song") {
     });
 }
 
-// do-what-it-says
-// use fs to run random.txt, run spotify-this-song for 'I want it that way'
-if (searchType === "do-what-it-says") {
-  var term = fs.readFile("random.txt", "utf8", function(error, data) {
-    var array = data.split(",");
-    if (array[0] === "spotify-this-song") {
-      spot
-        .search({ type: "track", query: array[1] })
-        .then(function(response) {
-          //   console.log(response);
-          for (var i = 0; i < response.tracks.items.length; i++) {
-            console.log("SONG NAME: " + response.tracks.items[i].name);
-            console.log(
-              "PREVIEW LINK: " + response.tracks.items[i].preview_url
-            );
-            console.log("ALBUM: " + response.tracks.items[i].album.name);
-            console.log("ARTISTS: ");
-            for (var j = 0; j < response.tracks.items[i].artists.length; j++) {
-              console.log(response.tracks.items[i].artists[j].name);
-            }
-            console.log(
-              "///////////////////////////////////////////////////////////////////\\\\\\"
-            );
-          }
-        })
-        .catch(function(err) {
-          console.log(err);
-        });
-    }
-
-    if (array[0] === "concert-this") {
-    }
-  });
-}
-
 // if band, make API request through Axios for Bands in Town API
 // "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp"
 
@@ -127,6 +92,10 @@ if (searchType === "concert-this") {
     // -MM/DD/YYYY date of event
 
     for (var i = 0; i < response.data.length; i++) {
+      var dateArray = response.data[i].datetime.split("T");
+      // sample date format: 2020-09-29T18:30:00
+      var date = dateArray[0];
+      var dateMo = moment(date, "YYYY-MM-DD");
       console.log("Concert Name: " + response.data[i].title);
       console.log(
         "Venue: " +
@@ -134,7 +103,7 @@ if (searchType === "concert-this") {
           ", " +
           response.data[i].venue.city
       );
-      console.log("Date: " + response.data[i].datetime);
+      console.log("Date: " + moment(dateMo).format("MM/DD/YYYY"));
 
       console.log(
         "///////////////////////////////////////////////////////////////////\\\\\\"
@@ -261,6 +230,10 @@ if (searchType === "do-what-it-says") {
         );
 
         for (var i = 0; i < response.data.length; i++) {
+          var dateArray = response.data[i].datetime.split("T");
+          // sample date format: 2020-09-29T18:30:00
+          var date = dateArray[0];
+          var dateMo = moment(date, "YYYY-MM-DD");
           console.log("Concert Name: " + response.data[i].title);
           console.log(
             "Venue: " +
@@ -268,7 +241,7 @@ if (searchType === "do-what-it-says") {
               ", " +
               response.data[i].venue.city
           );
-          console.log("Date: " + response.data[i].datetime);
+          console.log("Date: " + moment(dateMo).format("MM/DD/YYYY"));
 
           console.log(
             "///////////////////////////////////////////////////////////////////\\\\\\"
